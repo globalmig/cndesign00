@@ -1,0 +1,173 @@
+'use client';
+
+import Image from 'next/image';
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState, useCallback } from 'react';
+import { projects, imgSrc } from '@/lib/projects';
+
+export default function PortfolioDetail() {
+  const params   = useParams<{ slug: string }>();
+  const router   = useRouter();
+  const folder   = decodeURIComponent(params.slug);
+  const project  = projects.find(p => p.folder === folder);
+
+  const [lightbox, setLightbox] = useState<number | null>(null);
+
+  const close  = useCallback(() => setLightbox(null), []);
+  const prev   = useCallback(() =>
+    setLightbox(i => (i !== null && project ? (i - 1 + project.images.length) % project.images.length : null)),
+  [project]);
+  const next   = useCallback(() =>
+    setLightbox(i => (i !== null && project ? (i + 1) % project.images.length : null)),
+  [project]);
+
+  useEffect(() => {
+    if (lightbox === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape')      close();
+      if (e.key === 'ArrowLeft')   prev();
+      if (e.key === 'ArrowRight')  next();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [lightbox, close, prev, next]);
+
+  if (!project) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-[#888]">프로젝트를 찾을 수 없습니다.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-[#f9f8f5] min-h-screen">
+
+      {/* ── NAV ───────────────────────────────────────────────── */}
+      <header className="fixed top-0 inset-x-0 z-40 bg-white/95 backdrop-blur-sm border-b border-black/8">
+        <div className="max-w-7xl mx-auto px-8 h-16 flex items-center justify-between">
+          <button
+            onClick={() => router.back()}
+            className="flex items-center gap-3 text-xs tracking-[0.25em] uppercase text-[#888] hover:text-[#1c1c1c] transition-colors"
+          >
+            <span className="text-lg leading-none">←</span>
+            <span>Back</span>
+          </button>
+          <Link href="/" className="text-xs tracking-[0.3em] uppercase text-[#1c1c1c]">
+            CNS Design
+          </Link>
+        </div>
+      </header>
+
+      {/* ── HERO IMAGE ────────────────────────────────────────── */}
+      <div className="pt-16">
+        <div className="relative w-full h-[60vh] overflow-hidden">
+          <Image
+            src={imgSrc(project.folder, project.cover)}
+            alt={project.name}
+            fill
+            className="object-cover"
+            sizes="(max-width: 1920px) 100vw, 1920px"
+            quality={75}
+            priority
+          />
+          <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
+          <div className="absolute bottom-0 left-0 p-10 md:p-16 text-white">
+            <p className="text-[0.6rem] tracking-[0.5em] uppercase text-white/50 mb-3">Project</p>
+            <h1 className="text-4xl md:text-6xl font-extralight">{project.name}</h1>
+            <p className="text-white/50 text-sm mt-3">{project.images.length} photos</p>
+          </div>
+        </div>
+      </div>
+
+      {/* ── GALLERY GRID ──────────────────────────────────────── */}
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3"
+          style={{ gridAutoRows: 'clamp(300px, 42vw, 680px)', gridAutoFlow: 'dense' }}
+        >
+          {project.images.map((file, i) => {
+            const isLast  = i === project.images.length - 1;
+            const isWide  = i === 0 || i % 5 === 0;
+            return (
+              <button
+                key={file}
+                onClick={() => setLightbox(i)}
+                className={`group relative overflow-hidden ${isWide ? 'col-span-1 md:col-span-2' : ''}`}
+                style={isLast && !isWide ? { gridColumn: '1 / -1' } : undefined}
+              >
+                <Image
+                  src={imgSrc(project.folder, file)}
+                  alt={`${project.name} ${i + 1}`}
+                  fill
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                  quality={75}
+                  sizes={isWide || isLast
+                    ? '(max-width: 1920px) 100vw, 1920px'
+                    : '(max-width: 768px) 100vw, 960px'
+                  }
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-400" />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-400">
+                  <span className="text-white text-2xl">↗</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ── LIGHTBOX ──────────────────────────────────────────── */}
+      {lightbox !== null && (
+        <div
+          className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
+          onClick={close}
+        >
+          {/* image */}
+          <div
+            className="relative w-full h-full max-w-6xl max-h-[90vh] mx-4"
+            onClick={e => e.stopPropagation()}
+          >
+            <Image
+              src={imgSrc(project.folder, project.images[lightbox])}
+              alt={`${project.name} ${lightbox + 1}`}
+              fill
+              className="object-contain"
+              sizes="(max-width: 1920px) 100vw, 1920px"
+              quality={80}
+              priority
+            />
+          </div>
+
+          {/* close */}
+          <button
+            onClick={close}
+            className="absolute top-6 right-8 text-white/60 hover:text-white text-3xl leading-none transition-colors"
+          >
+            ×
+          </button>
+
+          {/* counter */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/40 text-xs tracking-widest">
+            {lightbox + 1} / {project.images.length}
+          </div>
+
+          {/* arrows */}
+          <button
+            onClick={e => { e.stopPropagation(); prev(); }}
+            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/50 hover:text-white text-4xl transition-colors px-4 py-6"
+          >
+            ‹
+          </button>
+          <button
+            onClick={e => { e.stopPropagation(); next(); }}
+            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/50 hover:text-white text-4xl transition-colors px-4 py-6"
+          >
+            ›
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
