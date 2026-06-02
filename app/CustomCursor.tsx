@@ -23,29 +23,35 @@ export default function CustomCursor() {
   const labelRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
+    // 터치 기기는 커서 불필요
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+
     const mouse = { x: -500, y: -500 };
     const dot   = { x: -500, y: -500 };
     const ring  = { x: -500, y: -500, scale: 1 };
     let hovering = false;
     let clicking = false;
     let raf = 0;
+    let dirty = true; // 움직임 있을 때만 RAF 지속
 
     const onMove = (e: MouseEvent) => {
       mouse.x  = e.clientX;
       mouse.y  = e.clientY;
       hovering = isClickable(e.target as Element);
+      dirty = true;
+      if (!raf) raf = requestAnimationFrame(tick);
     };
 
-    const onDown  = () => { clicking = true; };
-    const onUp    = () => { clicking = false; };
-    const onLeave = () => { mouse.x = -500; mouse.y = -500; };
+    const onDown  = () => { clicking = true;  dirty = true; };
+    const onUp    = () => { clicking = false; dirty = true; };
+    const onLeave = () => { mouse.x = -500; mouse.y = -500; dirty = true; };
 
     const tick = () => {
       dot.x  = lerp(dot.x,  mouse.x, 0.9);
       dot.y  = lerp(dot.y,  mouse.y, 0.9);
       ring.x = lerp(ring.x, mouse.x, 0.1);
       ring.y = lerp(ring.y, mouse.y, 0.1);
-      ring.scale = lerp(ring.scale, clicking ? 0.72 : hovering ? 1 : 1, 0.14);
+      ring.scale = lerp(ring.scale, clicking ? 0.72 : 1, 0.14);
 
       if (dotRef.current) {
         dotRef.current.style.transform = `translate(${dot.x - DOT / 2}px, ${dot.y - DOT / 2}px)`;
@@ -62,21 +68,31 @@ export default function CustomCursor() {
         labelRef.current.style.opacity = hovering ? '1' : '0';
       }
 
-      raf = requestAnimationFrame(tick);
+      // 링이 마우스에 충분히 가까워지면 RAF 중단
+      const settled =
+        Math.abs(ring.x - mouse.x) < 0.5 &&
+        Math.abs(ring.y - mouse.y) < 0.5 &&
+        Math.abs(ring.scale - (clicking ? 0.72 : 1)) < 0.01;
+
+      if (settled) {
+        dirty = false;
+        raf = 0;
+      } else {
+        raf = requestAnimationFrame(tick);
+      }
     };
 
     document.addEventListener('mousemove',  onMove);
     document.addEventListener('mousedown',  onDown);
     document.addEventListener('mouseup',    onUp);
     document.addEventListener('mouseleave', onLeave);
-    raf = requestAnimationFrame(tick);
 
     return () => {
       document.removeEventListener('mousemove',  onMove);
       document.removeEventListener('mousedown',  onDown);
       document.removeEventListener('mouseup',    onUp);
       document.removeEventListener('mouseleave', onLeave);
-      cancelAnimationFrame(raf);
+      if (raf) cancelAnimationFrame(raf);
     };
   }, []);
 
@@ -92,7 +108,6 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* precise dot */}
       <div
         ref={dotRef}
         style={{
@@ -104,7 +119,6 @@ export default function CustomCursor() {
           transition:      'opacity 0.15s ease',
         }}
       />
-      {/* ring */}
       <div
         ref={ringRef}
         style={{
