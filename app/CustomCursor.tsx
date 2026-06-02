@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 
-const RING = 52;
-const DOT  = 5;
+const RING = 64;
+const DOT  = 4;
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
@@ -18,8 +18,9 @@ function isClickable(el: Element | null): boolean {
 }
 
 export default function CustomCursor() {
-  const dotRef  = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
+  const dotRef   = useRef<HTMLDivElement>(null);
+  const ringRef  = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const mouse = { x: -500, y: -500 };
@@ -44,7 +45,7 @@ export default function CustomCursor() {
       dot.y  = lerp(dot.y,  mouse.y, 0.9);
       ring.x = lerp(ring.x, mouse.x, 0.1);
       ring.y = lerp(ring.y, mouse.y, 0.1);
-      ring.scale = lerp(ring.scale, clicking ? 0.55 : hovering ? 1.45 : 1, 0.14);
+      ring.scale = lerp(ring.scale, clicking ? 0.72 : hovering ? 1 : 1, 0.14);
 
       if (dotRef.current) {
         dotRef.current.style.transform = `translate(${dot.x - DOT / 2}px, ${dot.y - DOT / 2}px)`;
@@ -53,7 +54,12 @@ export default function CustomCursor() {
 
       if (ringRef.current) {
         ringRef.current.style.transform       = `translate(${ring.x - RING / 2}px, ${ring.y - RING / 2}px) scale(${ring.scale})`;
-        ringRef.current.style.backgroundColor = hovering ? 'white' : 'transparent';
+        ringRef.current.style.borderColor     = hovering ? 'rgba(160,128,96,1)' : 'rgba(255,255,255,0.88)';
+        ringRef.current.style.backgroundColor = hovering ? 'rgba(160,128,96,0.18)' : 'transparent';
+      }
+
+      if (labelRef.current) {
+        labelRef.current.style.opacity = hovering ? '1' : '0';
       }
 
       raf = requestAnimationFrame(tick);
@@ -80,7 +86,6 @@ export default function CustomCursor() {
     left:          0,
     pointerEvents: 'none',
     zIndex:        99999,
-    mixBlendMode:  'difference',
     willChange:    'transform',
     borderRadius:  '50%',
   };
@@ -90,19 +95,49 @@ export default function CustomCursor() {
       {/* precise dot */}
       <div
         ref={dotRef}
-        style={{ ...base, width: DOT, height: DOT, backgroundColor: 'white' }}
+        style={{
+          ...base,
+          width:           DOT,
+          height:          DOT,
+          backgroundColor: 'white',
+          boxShadow:       '0 0 0 1.5px rgba(28,28,28,0.22)',
+          transition:      'opacity 0.15s ease',
+        }}
       />
-      {/* big ring */}
+      {/* ring */}
       <div
         ref={ringRef}
         style={{
           ...base,
-          width:  RING,
-          height: RING,
-          border: '1.5px solid white',
-          transition: 'background-color 0.12s ease',
+          width:      RING,
+          height:     RING,
+          border:     '1.5px solid rgba(255,255,255,0.88)',
+          boxShadow:  '0 0 0 1px rgba(28,28,28,0.1), 0 4px 20px rgba(0,0,0,0.06)',
+          transition: 'border-color 0.22s ease, background-color 0.22s ease',
+          display:    'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
-      />
+      >
+        <span
+          ref={labelRef}
+          style={{
+            fontSize:      '8px',
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color:         'rgba(255,255,255,0.95)',
+            fontFamily:    'var(--font-geist-sans), Pretendard, Arial, sans-serif',
+            fontWeight:    300,
+            opacity:       0,
+            transition:    'opacity 0.22s ease',
+            userSelect:    'none',
+            lineHeight:    1,
+            borderRadius:  0,
+          }}
+        >
+          click
+        </span>
+      </div>
     </>
   );
 }
