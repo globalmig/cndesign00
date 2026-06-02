@@ -12,29 +12,56 @@ export default function Home() {
   const sec3Ref   = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!seqRef.current || !sec2Ref.current || !sec3Ref.current) return;
+
+    let isSnapping = false;
+
+    const snapTo = (y: number) => {
+      isSnapping = true;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+      setTimeout(() => { isSnapping = false; }, 900);
+    };
+
     const onScroll = () => {
       if (!seqRef.current || !sec2Ref.current || !sec3Ref.current) return;
-
-      const rect     = seqRef.current.getBoundingClientRect();
+      const rect      = seqRef.current.getBoundingClientRect();
       const maxScroll = seqRef.current.offsetHeight - window.innerHeight;
       const scrolled  = Math.max(0, -rect.top);
       const p         = maxScroll > 0 ? Math.min(1, scrolled / maxScroll) : 0;
 
-      // Nav: stays transparent until the whole sequence has scrolled past
       setNavScrolled(scrolled >= maxScroll);
 
-      // Section 2 slides in: p 0 → 0.5
-      const s2 = Math.max(0, Math.min(100, (1 - p * 2) * 100));
-      // Section 3 slides in: p 0.5 → 1
-      const s3 = Math.max(0, Math.min(100, (1 - (p - 0.5) * 2) * 100));
+      sec2Ref.current.style.transform = `translateY(${Math.max(0, (1 - p * 2) * 100)}%)`;
+      sec3Ref.current.style.transform = `translateY(${Math.max(0, (1 - (p - 0.5) * 2) * 100)}%)`;
+    };
 
-      sec2Ref.current.style.transform = `translateY(${s2}%)`;
-      sec3Ref.current.style.transform = `translateY(${s3}%)`;
+    const onWheel = (e: WheelEvent) => {
+      if (!seqRef.current) return;
+      const seqTop    = seqRef.current.offsetTop;
+      const vh        = window.innerHeight;
+      const relScroll = window.scrollY - seqTop;
+
+      if (relScroll < 0 || relScroll > 2 * vh) return;
+
+      const section = Math.round(relScroll / vh);
+
+      if (section >= 2 && e.deltaY > 0) return;
+      if (section <= 0 && e.deltaY < 0) return;
+
+      e.preventDefault();
+      if (isSnapping) return;
+
+      snapTo(seqTop + (e.deltaY > 0 ? section + 1 : section - 1) * vh);
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll(); // run once on mount
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener('wheel', onWheel, { passive: false });
+    onScroll();
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('wheel', onWheel);
+    };
   }, []);
 
   return (
@@ -272,18 +299,15 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <p className="text-[0.65rem] tracking-[0.5em] uppercase text-[#a08060] mb-4">Contact</p>
           <h2 className="text-4xl font-extralight mb-16">함께 만들어가요</h2>
-          <div className="grid md:grid-cols-3 gap-12 border-t border-white/10 pt-12">
-            <div>
-              <p className="text-[0.6rem] tracking-[0.4em] uppercase text-white/30 mb-3">Company</p>
-              <p className="text-base">씨앤에스디자인</p>
+          <div className="border-t border-white/10 pt-10 flex flex-col sm:flex-row sm:items-start gap-6 sm:gap-20">
+            <div className="shrink-0">
+              <p className="text-sm text-white/70">씨앤에스디자인</p>
+              <p className="text-xs text-white/35 mt-1">대표 유두석</p>
             </div>
-            <div>
-              <p className="text-[0.6rem] tracking-[0.4em] uppercase text-white/30 mb-3">Phone</p>
-              <p className="text-base">연락처를 입력해주세요</p>
-            </div>
-            <div>
-              <p className="text-[0.6rem] tracking-[0.4em] uppercase text-white/30 mb-3">Email</p>
-              <p className="text-base">이메일을 입력해주세요</p>
+            <div className="text-xs text-white/35 leading-loose">
+              <p>Fax. 032-710-2267</p>
+              <p>cnsdesign@cnsdesign.co.kr</p>
+              <p>인천광역시 계양구 서운산어로 27, 204,205호 (서운동 엘림빌딩)</p>
             </div>
           </div>
           <div className="mt-20 pt-8 border-t border-white/10 flex items-center justify-between">
