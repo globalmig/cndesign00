@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "./CustomCursor";
 
@@ -8,13 +8,9 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 // title: 27자 / description: 67자 (한글 권장 범위 이내)
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.cnsdesign.co.kr"),
   title: {
     default: "씨앤에스디자인 | 상업 인테리어 디자인 스튜디오",
     template: "%s | 씨앤에스디자인",
@@ -70,7 +66,7 @@ export default function RootLayout({
     <html
       lang="ko"
       data-scroll-behavior="smooth"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <CustomCursor />
