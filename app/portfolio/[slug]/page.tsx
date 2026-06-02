@@ -13,6 +13,14 @@ export default function PortfolioDetail() {
   const project  = projects.find(p => p.folder === folder);
 
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText('cnsdesign@cnsdesign.co.kr').then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   const close  = useCallback(() => setLightbox(null), []);
   const prev   = useCallback(() =>
@@ -117,6 +125,33 @@ export default function PortfolioDetail() {
           })}
         </div>
       </div>
+
+      {/* ── INQUIRY ───────────────────────────────────────────── */}
+      <section className="bg-[#1a1a1a] text-white py-24 px-8">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-[0.65rem] tracking-[0.5em] uppercase text-[#a08060] mb-4">Inquiry</p>
+          <h2 className="text-4xl font-extralight mb-12">비슷한 공간을 원하신다면</h2>
+          <div className="border-t border-white/10 pt-10 flex flex-col sm:flex-row sm:items-start gap-6 sm:gap-20">
+            <div className="shrink-0">
+              <p className="text-sm text-white/70">씨앤에스디자인</p>
+              <p className="text-xs text-white/35 mt-1">대표 유두석</p>
+            </div>
+            <div className="text-xs text-white/35 leading-loose">
+              <p>Fax. 032-710-2267</p>
+              <p>cnsdesign@cnsdesign.co.kr</p>
+              <p>인천광역시 계양구 서운산어로 27, 204,205호 (서운동 엘림빌딩)</p>
+            </div>
+            <div className="sm:ml-auto self-center mt-2 sm:mt-0">
+              <button
+                onClick={copyEmail}
+                className="border border-white/20 hover:border-white/60 text-white/60 hover:text-white text-[0.65rem] tracking-[0.35em] uppercase px-8 py-3 transition-all duration-300"
+              >
+                {copied ? '복사됨 ✓' : '이메일 문의'}
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ── LIGHTBOX ──────────────────────────────────────────── */}
       {lightbox !== null && (
