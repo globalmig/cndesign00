@@ -1,23 +1,147 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { projects, imgSrc } from '@/lib/projects';
+import { projects, imgSrc, type Category } from '@/lib/projects';
 import HeroSequence from './HeroSequence';
+import IntroVideo from './IntroVideo';
+
+const CATEGORIES: {
+  id: Category;
+  label: string;
+  title: string;
+  desc: string;
+  bg: string;
+  accent: string;
+}[] = [
+  {
+    id: 'retail',
+    label: 'Retail',
+    title: '리테일 & 상업 공간',
+    desc: '카페, 레스토랑, 쇼룸 등 다양한 상업 공간의 인테리어를 전문으로 합니다.',
+    bg: 'bg-[#f9f8f5]',
+    accent: 'text-[#a08060]',
+  },
+  {
+    id: 'office',
+    label: 'Office',
+    title: '오피스 & 업무 공간',
+    desc: '브랜드 아이덴티티와 업무 효율을 함께 담은 오피스 공간을 디자인합니다.',
+    bg: 'bg-white',
+    accent: 'text-[#a08060]',
+  },
+  {
+    id: 'residence',
+    label: 'Residence',
+    title: '주거 & 호스피탈리티',
+    desc: '호텔과 프라이빗 주거 공간의 프리미엄 인테리어를 제공합니다.',
+    bg: 'bg-[#f9f8f5]',
+    accent: 'text-[#a08060]',
+  },
+  {
+    id: 'exercise',
+    label: 'Exercise',
+    title: '피트니스 & 웰니스',
+    desc: '피트니스 센터, 필라테스 스튜디오 등 건강한 공간을 디자인합니다.',
+    bg: 'bg-white',
+    accent: 'text-[#a08060]',
+  },
+];
+
+function ProjectCard({
+  p,
+  sizes,
+  colSpanClass = '',
+  rowSpanClass = '',
+}: {
+  p: (typeof projects)[0];
+  sizes: string;
+  colSpanClass?: string;
+  rowSpanClass?: string;
+}) {
+  return (
+    <Link
+      href={`/portfolio/${encodeURIComponent(p.folder)}`}
+      className={['group relative overflow-hidden bg-[#e2e0da] block h-full', colSpanClass, rowSpanClass].filter(Boolean).join(' ')}
+    >
+      <Image
+        src={imgSrc(p.folder, p.cover)}
+        alt={p.name}
+        fill
+        loading="lazy"
+        className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.05]"
+        sizes={sizes}
+      />
+      <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="absolute bottom-0 inset-x-0 p-4 md:p-6 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+        <p className="text-white text-sm md:text-base tracking-wide leading-tight">{p.name}</p>
+        <p className="text-white/50 text-xs mt-1 tracking-wider">View project →</p>
+      </div>
+    </Link>
+  );
+}
 
 export default function Home() {
   return (
     <div className="text-[#1c1c1c]">
 
+      <IntroVideo />
       <HeroSequence />
 
+      {/* ── 카테고리 섹션 ─────────────────────────────────────────── */}
+      {CATEGORIES.map((cat) => {
+        const list = projects.filter((p) => p.category === cat.id);
+        const cols = list.length <= 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-2 md:grid-cols-3';
+        const rowH = list.length <= 2
+          ? 'clamp(280px, 35vw, 560px)'
+          : 'clamp(200px, 24vw, 380px)';
+
+        return (
+          <section key={cat.id} id={cat.id} className={`${cat.bg} py-24 px-4 md:px-8`}>
+            <div className="max-w-7xl mx-auto">
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-4">
+                <div>
+                  <p className={`text-[0.65rem] tracking-[0.5em] uppercase ${cat.accent} mb-3`}>
+                    {cat.label}
+                  </p>
+                  <h2 className="text-3xl md:text-4xl font-extralight">{cat.title}</h2>
+                </div>
+                <p className="text-[#888] text-sm leading-loose max-w-xs md:text-right">
+                  {cat.desc}
+                </p>
+              </div>
+
+              <div
+                className={`grid ${cols} gap-2 md:gap-3`}
+                style={{ gridAutoRows: rowH, gridAutoFlow: 'dense' }}
+              >
+                {list.map((p) => (
+                  <ProjectCard
+                    key={p.folder}
+                    p={p}
+                    colSpanClass={list.length > 2 && p.colSpan === 2 ? 'col-span-2' : ''}
+                    rowSpanClass={list.length > 2 && p.rowSpan === 2 ? 'md:row-span-2' : ''}
+                    sizes={
+                      list.length <= 2
+                        ? '(max-width: 768px) 100vw, 50vw'
+                        : p.colSpan === 2
+                          ? '(max-width: 768px) 100vw, 66vw'
+                          : '(max-width: 768px) 50vw, 33vw'
+                    }
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })}
+
       {/* ── PORTFOLIO ────────────────────────────────────────────── */}
-      <section id="portfolio" className="bg-[#f9f8f5] py-28 px-4 md:px-8">
+      <section id="portfolio" className="bg-[#1a1a1a] py-28 px-4 md:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-[0.65rem] tracking-[0.5em] uppercase text-[#a08060] mb-4">Our Work</p>
-            <h2 className="text-4xl font-extralight">Portfolio</h2>
+            <h2 className="text-4xl font-extralight text-white">Portfolio</h2>
           </div>
 
-          {/* editorial grid */}
           <div
             className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3"
             style={{ gridAutoRows: 'clamp(220px, 28vw, 420px)', gridAutoFlow: 'dense' }}
@@ -25,38 +149,36 @@ export default function Home() {
             {projects.map((p, idx) => {
               const isLast = idx === projects.length - 1;
               return (
-              <Link
-                key={p.folder}
-                href={`/portfolio/${encodeURIComponent(p.folder)}`}
-                className={[
-                  'group relative overflow-hidden bg-[#e2e0da]',
-                  !isLast && p.colSpan === 2 ? 'col-span-2' : '',
-                  !isLast && p.rowSpan === 2 ? 'md:row-span-2' : '',
-                ].join(' ')}
-                style={isLast ? { gridColumn: '1 / -1' } : undefined}
-              >
-                <Image
-                  src={imgSrc(p.folder, p.cover)}
-                  alt={p.name}
-                  fill
-                  loading="lazy"
-                  className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.05]"
-                  sizes={
-                    isLast
-                      ? '100vw'
-                      : p.colSpan === 2
-                        ? '(max-width: 768px) 100vw, 66vw'
-                        : '(max-width: 768px) 50vw, 33vw'
-                  }
-                />
-                {/* hover overlay */}
-                <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                {/* project name */}
-                <div className="absolute bottom-0 inset-x-0 p-4 md:p-6 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                  <p className="text-white text-sm md:text-base tracking-wide leading-tight">{p.name}</p>
-                  <p className="text-white/50 text-xs mt-1 tracking-wider">View project →</p>
-                </div>
-              </Link>
+                <Link
+                  key={p.folder}
+                  href={`/portfolio/${encodeURIComponent(p.folder)}`}
+                  className={[
+                    'group relative overflow-hidden bg-[#2a2a2a]',
+                    !isLast && p.colSpan === 2 ? 'col-span-2' : '',
+                    !isLast && p.rowSpan === 2 ? 'md:row-span-2' : '',
+                  ].join(' ')}
+                  style={isLast ? { gridColumn: '1 / -1' } : undefined}
+                >
+                  <Image
+                    src={imgSrc(p.folder, p.cover)}
+                    alt={p.name}
+                    fill
+                    loading="lazy"
+                    className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.05]"
+                    sizes={
+                      isLast
+                        ? '100vw'
+                        : p.colSpan === 2
+                          ? '(max-width: 768px) 100vw, 66vw'
+                          : '(max-width: 768px) 50vw, 33vw'
+                    }
+                  />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute bottom-0 inset-x-0 p-4 md:p-6 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                    <p className="text-white text-sm md:text-base tracking-wide leading-tight">{p.name}</p>
+                    <p className="text-white/50 text-xs mt-1 tracking-wider">View project →</p>
+                  </div>
+                </Link>
               );
             })}
           </div>

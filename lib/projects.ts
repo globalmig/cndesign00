@@ -1,3 +1,5 @@
+export type Category = 'retail' | 'office' | 'residence' | 'exercise';
+
 export interface Project {
   name: string;
   folder: string;
@@ -5,6 +7,7 @@ export interface Project {
   images: string[];
   colSpan: 1 | 2;
   rowSpan: 1 | 2;
+  category: Category;
 }
 
 export function imgSrc(folder: string, file: string) {
@@ -21,7 +24,7 @@ export const projects: Project[] = [
       'L7R00040.jpg','L7R00043.jpg','L7R00046.jpg','L7R00051.jpg',
       'L7R00053.jpg','L7R00057.jpg','L7R00060.jpg','L7R00070.jpg','L7R00077.jpg',
     ],
-    colSpan: 2, rowSpan: 1,
+    colSpan: 2, rowSpan: 1, category: 'retail',
   },
   {
     name: 'CMB 방송국',
@@ -31,7 +34,7 @@ export const projects: Project[] = [
       'L7C07747.jpg','L7R07037.jpg','L7R07039.jpg','L7R07050.jpg',
       'L7R07056.jpg','L7R07063.jpg','L7R07067.jpg','L7R07078.jpg','L7R07084.jpg',
     ],
-    colSpan: 1, rowSpan: 1,
+    colSpan: 1, rowSpan: 1, category: 'office',
   },
   {
     name: '골프존파크',
@@ -43,7 +46,7 @@ export const projects: Project[] = [
       'L7R02310.jpg','L7R02313.jpg','L7R02315.jpg','L7R02318.jpg',
       'L7R02324.jpg','L7R02326.jpg','L7R02327.jpg',
     ],
-    colSpan: 1, rowSpan: 2,
+    colSpan: 1, rowSpan: 2, category: 'exercise',
   },
   {
     name: '노량진 스시101',
@@ -54,7 +57,7 @@ export const projects: Project[] = [
       'KakaoTalk_20260525_133310111_01.jpg',
       'KakaoTalk_20260525_133310111_02.jpg',
     ],
-    colSpan: 1, rowSpan: 1,
+    colSpan: 1, rowSpan: 1, category: 'retail',
   },
   {
     name: '노량진101',
@@ -65,7 +68,7 @@ export const projects: Project[] = [
         ? 'KakaoTalk_20260525_133124398.jpg'
         : `KakaoTalk_20260525_133124398_${String(i).padStart(2, '0')}.jpg`
     ),
-    colSpan: 1, rowSpan: 1,
+    colSpan: 1, rowSpan: 1, category: 'retail',
   },
   {
     name: '대방동 카페 프로스퍼',
@@ -77,7 +80,7 @@ export const projects: Project[] = [
       'KakaoTalk_20260525_133416258_02.jpg',
       'KakaoTalk_20260525_133416258_03.jpg',
     ],
-    colSpan: 2, rowSpan: 1,
+    colSpan: 2, rowSpan: 1, category: 'retail',
   },
   {
     name: '대방동 피자·파스타',
@@ -88,7 +91,7 @@ export const projects: Project[] = [
       'KakaoTalk_20260525_132917437_01.jpg',
       'KakaoTalk_20260525_132917437_02.jpg',
     ],
-    colSpan: 1, rowSpan: 1,
+    colSpan: 1, rowSpan: 1, category: 'retail',
   },
   {
     name: '리핏피트니스',
@@ -99,7 +102,7 @@ export const projects: Project[] = [
       'L7R07343.JPG','L7R07366.JPG','L7R07367.JPG','L7R07371.JPG',
       'L7R07372.JPG','L7R07390.JPG','L7R07398.JPG',
     ],
-    colSpan: 1, rowSpan: 1,
+    colSpan: 1, rowSpan: 1, category: 'exercise',
   },
   {
     name: '서지넥스 사무실',
@@ -113,7 +116,7 @@ export const projects: Project[] = [
       'L7R07919.JPG','L7R07924.JPG','L7R07927.JPG','L7R07928.JPG',
       'L7R07930.JPG','L7R07931.JPG',
     ],
-    colSpan: 2, rowSpan: 1,
+    colSpan: 2, rowSpan: 1, category: 'office',
   },
   {
     name: '아델린 필라테스',
@@ -123,7 +126,7 @@ export const projects: Project[] = [
       'L7R08566.jpg','L7R08568.jpg','L7R08574.jpg','L7R08580.jpg',
       'L7R08593.jpg','L7R08595.jpg','L7R08602.jpg','L7R08606.jpg','L7R08633.jpg',
     ],
-    colSpan: 1, rowSpan: 2,
+    colSpan: 1, rowSpan: 2, category: 'exercise',
   },
   {
     name: '주안 틈 아카데미',
@@ -134,7 +137,7 @@ export const projects: Project[] = [
         ? 'KakaoTalk_20260525_132829945.jpg'
         : `KakaoTalk_20260525_132829945_${String(i).padStart(2, '0')}.jpg`
     ),
-    colSpan: 1, rowSpan: 1,
+    colSpan: 1, rowSpan: 1, category: 'exercise',
   },
   {
     name: '청라 미미다방',
@@ -145,7 +148,7 @@ export const projects: Project[] = [
         ? 'KakaoTalk_20260525_132737258.jpg'
         : `KakaoTalk_20260525_132737258_${String(i).padStart(2, '0')}.jpg`
     ),
-    colSpan: 1, rowSpan: 1,
+    colSpan: 1, rowSpan: 1, category: 'retail',
   },
   {
     name: '칸톤 홍보관',
@@ -159,7 +162,7 @@ export const projects: Project[] = [
       'L7R06101.JPG','L7R06108.JPG','L7R06111.JPG','L7R06115.JPG',
       'L7R06117.JPG','L7R06121.JPG',
     ],
-    colSpan: 2, rowSpan: 1,
+    colSpan: 2, rowSpan: 1, category: 'retail',
   },
   {
     name: '콜렉션비',
@@ -169,7 +172,7 @@ export const projects: Project[] = [
       'L7R04327.jpg','L7R04333.jpg','L7R04334.jpg','L7R04336.jpg',
       'L7R04369.jpg','L7R04386.jpg','L7R04408.jpg','L7R04410.jpg','L7R04412.jpg',
     ],
-    colSpan: 1, rowSpan: 1,
+    colSpan: 1, rowSpan: 1, category: 'retail',
   },
   {
     name: '프라이빗룸',
@@ -189,7 +192,7 @@ export const projects: Project[] = [
       'KakaoTalk_20240709_122023485_22.jpg',
       'KakaoTalk_20240709_122023485_26.jpg',
     ],
-    colSpan: 1, rowSpan: 2,
+    colSpan: 1, rowSpan: 2, category: 'residence',
   },
   {
     name: '홀리랜드호텔',
@@ -202,7 +205,7 @@ export const projects: Project[] = [
       'L7R02169.jpg','L7R02177.jpg','L7R02190.jpg','L7R02193.jpg',
       'L7R02209.jpg','L7R02223.jpg','L7R02224.jpg',
     ],
-    colSpan: 2, rowSpan: 1,
+    colSpan: 2, rowSpan: 1, category: 'residence',
   },
   {
     name: '힙 필라테스',
@@ -214,6 +217,6 @@ export const projects: Project[] = [
       'L7R08229.JPG','L7R08240.JPG','L7R08246.JPG','L7R08250.JPG',
       'L7R08252.JPG','L7R08258.JPG','L7R08262.JPG','L7R08263.JPG','L7R08266.JPG',
     ],
-    colSpan: 1, rowSpan: 1,
+    colSpan: 1, rowSpan: 1, category: 'exercise',
   },
 ];
