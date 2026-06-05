@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { projects, imgSrc, type Category } from '@/lib/projects';
 import HeroSequence from './HeroSequence';
-import IntroVideo from './IntroVideo';
 
 const CATEGORIES: {
   id: Category;
@@ -83,7 +82,6 @@ export default function Home() {
   return (
     <div className="text-[#1c1c1c]">
 
-      <IntroVideo />
       <HeroSequence />
 
       {/* ── 카테고리 섹션 ─────────────────────────────────────────── */}
