@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { projects, imgSrc, type Category } from '@/lib/projects';
 import HeroSequence from './HeroSequence';
+import QuickNav from './QuickNav';
 
 const CATEGORIES: {
   id: Category;
@@ -45,7 +46,7 @@ const CATEGORIES: {
   },
 ];
 
-function ProjectCard({
+function FlipCard({
   p,
   sizes,
   colSpanClass = '',
@@ -59,20 +60,28 @@ function ProjectCard({
   return (
     <Link
       href={`/portfolio/${encodeURIComponent(p.folder)}`}
-      className={['group relative overflow-hidden bg-[#e2e0da] block h-full', colSpanClass, rowSpanClass].filter(Boolean).join(' ')}
+      className={['flip-card block h-full', colSpanClass, rowSpanClass].filter(Boolean).join(' ')}
+      style={{ perspective: '1200px' }}
     >
-      <Image
-        src={imgSrc(p.folder, p.cover)}
-        alt={p.name}
-        fill
-        loading="lazy"
-        className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.05]"
-        sizes={sizes}
-      />
-      <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      <div className="absolute bottom-0 inset-x-0 p-4 md:p-6 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-        <p className="text-white text-sm md:text-base tracking-wide leading-tight">{p.name}</p>
-        <p className="text-white/50 text-xs mt-1 tracking-wider">View project →</p>
+      <div className="flip-card-inner">
+        {/* Front */}
+        <div className="flip-card-front overflow-hidden bg-[#e2e0da]">
+          <Image
+            src={imgSrc(p.folder, p.cover)}
+            alt={p.name}
+            fill
+            loading="lazy"
+            className="object-cover"
+            sizes={sizes}
+          />
+        </div>
+        {/* Back */}
+        <div className="flip-card-back bg-[#1c1c1c] flex flex-col items-center justify-center text-white p-8">
+          <p className="text-[0.58rem] tracking-[0.45em] uppercase text-[#a08060] mb-5">CNS Design</p>
+          <p className="text-lg font-light tracking-wide mb-5">{p.name}</p>
+          <div className="w-8 h-px bg-white/25 mb-5" />
+          <p className="text-white/45 text-[0.65rem] tracking-[0.3em] uppercase">View Project →</p>
+        </div>
       </div>
     </Link>
   );
@@ -82,6 +91,7 @@ export default function Home() {
   return (
     <div className="text-[#1c1c1c]">
 
+      <QuickNav />
       <HeroSequence />
 
       {/* ── 카테고리 섹션 ─────────────────────────────────────────── */}
@@ -112,7 +122,7 @@ export default function Home() {
                 style={{ gridAutoRows: rowH, gridAutoFlow: 'dense' }}
               >
                 {list.map((p) => (
-                  <ProjectCard
+                  <FlipCard
                     key={p.folder}
                     p={p}
                     colSpanClass={list.length > 2 && p.colSpan === 2 ? 'col-span-2' : ''}

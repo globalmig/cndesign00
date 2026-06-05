@@ -64,6 +64,20 @@ function SectionContent({ s, mobile = false }: { s: typeof sections[0]; mobile?:
   );
 }
 
+const mainNavLinks = [
+  { label: 'Home',      href: '#hero' },
+  { label: 'About',     href: '#about' },
+  { label: 'Retail',    href: '#retail' },
+  { label: 'Office',    href: '#office' },
+  { label: 'Residence', href: '#residence' },
+  { label: 'Exercise',  href: '#exercise' },
+];
+
+const subNavLinks = [
+  { label: 'Portfolio', href: '#portfolio' },
+  { label: 'Contact',   href: '#contact' },
+];
+
 export default function HeroSequence() {
   const [navScrolled, setNavScrolled] = useState(false);
   const seqRef  = useRef<HTMLDivElement>(null);
@@ -139,58 +153,44 @@ export default function HeroSequence() {
 
   return (
     <>
-      {/* ── NAV ── */}
+      {/* ── GNB (전체 공통) ── */}
       <header
         className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 border-b ${
           navScrolled
             ? 'bg-white/95 backdrop-blur-sm border-black/8 py-3'
-            : 'bg-transparent border-transparent py-3'
+            : 'bg-transparent border-transparent py-5'
         }`}
       >
-        <nav className="max-w-screen-xl mx-auto px-6 flex items-center gap-6">
+        <nav className="max-w-7xl mx-auto px-8 flex items-center justify-between">
           {/* 로고 */}
-          <a href="#hero" className="shrink-0 mr-2">
+          <a href="#hero">
             <Image
               src={navScrolled ? LOGO_BLACK : LOGO_WHITE}
               alt="씨앤에스디자인"
               width={130}
               height={44}
-              className="h-10 w-auto object-contain"
+              className="h-9 w-auto object-contain transition-all duration-500"
               priority
             />
           </a>
 
           {/* 주 메뉴 — 데스크탑 */}
-          <div className={`hidden lg:flex items-center gap-7 text-[0.68rem] tracking-[0.2em] uppercase transition-colors duration-500 ${
-            navScrolled ? 'text-[#1c1c1c]' : 'text-white/80'
+          <div className={`hidden lg:flex items-center gap-8 text-[0.68rem] tracking-[0.2em] uppercase transition-colors duration-500 ${
+            navScrolled ? 'text-[#1c1c1c]' : 'text-white/85'
           }`}>
-            {[
-              { label: 'Home',      href: '#hero' },
-              { label: 'About',     href: '#about' },
-              { label: 'Retail',    href: '#retail' },
-              { label: 'Office',    href: '#office' },
-              { label: 'Residence', href: '#residence' },
-              { label: 'Exercise',  href: '#exercise' },
-            ].map(({ label, href }) => (
-              <a key={label} href={href} className="hover:opacity-100 opacity-75 transition-opacity">
+            {[...mainNavLinks, ...subNavLinks].map(({ label, href }) => (
+              <a key={label} href={href} className="hover:opacity-60 transition-opacity">
                 {label}
               </a>
             ))}
           </div>
 
-          {/* 우측 메뉴 */}
-          <div className={`ml-auto flex items-center gap-6 text-[0.68rem] tracking-[0.2em] uppercase transition-colors duration-500 ${
-            navScrolled ? 'text-[#888]' : 'text-white/40'
-          }`}>
-            <a href="#portfolio" className={`hidden lg:block hover:opacity-80 transition-opacity ${navScrolled ? 'text-[#888]' : 'text-white/40'}`}>Portfolio</a>
-            <a href="#contact"   className={`hidden lg:block hover:opacity-80 transition-opacity ${navScrolled ? 'text-[#888]' : 'text-white/40'}`}>Contact</a>
-            {/* 햄버거 */}
-            <button aria-label="메뉴" className="flex flex-col gap-[5px] ml-1">
-              <span className={`block w-5 h-[1.5px] transition-colors duration-500 ${navScrolled ? 'bg-[#1c1c1c]' : 'bg-white/70'}`} />
-              <span className={`block w-5 h-[1.5px] transition-colors duration-500 ${navScrolled ? 'bg-[#1c1c1c]' : 'bg-white/70'}`} />
-              <span className={`block w-5 h-[1.5px] transition-colors duration-500 ${navScrolled ? 'bg-[#1c1c1c]' : 'bg-white/70'}`} />
-            </button>
-          </div>
+          {/* 햄버거 — 모바일 */}
+          <button aria-label="메뉴" className="lg:hidden flex flex-col gap-1.25">
+            <span className={`block w-5 h-[1.5px] transition-colors duration-500 ${navScrolled ? 'bg-[#1c1c1c]' : 'bg-white'}`} />
+            <span className={`block w-5 h-[1.5px] transition-colors duration-500 ${navScrolled ? 'bg-[#1c1c1c]' : 'bg-white'}`} />
+            <span className={`block w-5 h-[1.5px] transition-colors duration-500 ${navScrolled ? 'bg-[#1c1c1c]' : 'bg-white'}`} />
+          </button>
         </nav>
       </header>
 
@@ -202,9 +202,14 @@ export default function HeroSequence() {
             <Image src={imgSrc(sections[0].img.folder, sections[0].img.file)} alt="CNS Design"
               fill priority sizes="(max-width: 767px) 1px, 100vw" className="object-cover" />
             <SectionContent s={sections[0]} />
-            <div className="absolute bottom-10 right-12 flex flex-col items-center gap-3 text-white/35">
-              <span className="text-[0.5rem] tracking-[0.45em] uppercase">Scroll</span>
-              <span className="block w-px h-10 bg-linear-to-b from-white/45 to-transparent" />
+
+            {/* 스크롤 다운 인디케이터 */}
+            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40">
+              <span className="text-[0.5rem] tracking-[0.55em] uppercase">Scroll Down</span>
+              <span
+                className="block w-px h-14 bg-white/40"
+                style={{ animation: 'scrollLine 1.8s ease-in-out infinite' }}
+              />
             </div>
           </section>
 
