@@ -2,28 +2,27 @@
 
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
-import { imgSrc } from '@/lib/projects';
 
 const LOGO_WHITE  = '/logo/%EC%94%A8%EC%95%A4%EC%97%90%EC%8A%A4%20%EB%A1%9C%EA%B3%A0-%ED%99%94%EC%9D%B4%ED%8A%B8.png';
 const LOGO_BLACK  = '/logo/%EC%94%A8%EC%95%A4%EC%97%90%EC%8A%A4%20%EB%A1%9C%EA%B3%A0-%EB%B8%94%EB%9E%99.png';
 
 const sections = [
   {
-    img: { folder: '홀리랜드호텔', file: 'L7R02150.jpg' },
+    src: '',
     label: 'Interior Design Studio',
     ko: '고객을 위한 최상의\n디자인을 제공합니다.',
     en: 'Must Be Design For You',
     desc: '씨앤에스디자인은 고객 여러분을 위한 디자인을 최우선으로 합니다.\n방대한 디자인 작업물과 다양한 공간의 디자인 경험으로 고객을 위한 디자인을 제공하고\n다년간의 시공 경험으로 최상의 디자인과 최선의 디테일을 제공합니다.',
   },
   {
-    img: { folder: '골프존파크', file: 'L7R02290.jpg' },
+    src: '/hero/hero_bg_02.png',
     label: 'Design Philosophy',
     ko: '공간을 넘어,\n경험을 디자인합니다.',
     en: 'Beyond Space, Design Experience',
     desc: '기능적 완성도와 감각적 아름다움의 균형을 통해\n클라이언트의 비전이 공간이 됩니다.\n사람과 공간이 만들어내는 이야기를 디자인합니다.',
   },
   {
-    img: { folder: '칸톤 홍보관', file: 'L7R06060.JPG' },
+    src: '/hero/hero_bg_03.png',
     label: 'Our Process',
     ko: '처음 만남부터\n완공의 순간까지.',
     en: 'From First Meeting to Completion',
@@ -31,7 +30,15 @@ const sections = [
   },
 ];
 
-function SectionContent({ s, mobile = false }: { s: typeof sections[0]; mobile?: boolean }) {
+function SectionContent({
+  s,
+  mobile = false,
+  textStyle,
+}: {
+  s: typeof sections[0];
+  mobile?: boolean;
+  textStyle?: React.CSSProperties;
+}) {
   const titleSize = mobile ? 'text-[1.65rem]' : 'text-[3.25rem]';
   const enSize    = mobile ? 'text-[0.95rem]' : 'text-[1.3rem]';
   const descSize  = mobile ? 'text-[0.72rem]' : 'text-[0.82rem]';
@@ -40,7 +47,10 @@ function SectionContent({ s, mobile = false }: { s: typeof sections[0]; mobile?:
     <>
       <div className="absolute inset-0 bg-black/48" />
 
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-8">
+      <div
+        className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-8"
+        style={textStyle}
+      >
         <p className="text-[0.55rem] tracking-[0.6em] uppercase text-white/55 mb-6 md:mb-8">
           {s.label}
         </p>
@@ -80,10 +90,21 @@ const subNavLinks = [
 
 export default function HeroSequence() {
   const [navScrolled, setNavScrolled] = useState(false);
-  const seqRef  = useRef<HTMLDivElement>(null);
-  const sec2Ref = useRef<HTMLDivElement>(null);
-  const sec3Ref = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted]         = useState(false);
+  const [showContent, setShowContent] = useState(false);
+  const seqRef    = useRef<HTMLDivElement>(null);
+  const sec2Ref   = useRef<HTMLDivElement>(null);
+  const sec3Ref   = useRef<HTMLDivElement>(null);
   const navScrolledRef = useRef(false);
+  const slowVideo = (el: HTMLVideoElement | null) => {
+    if (el) el.playbackRate = 0.4;
+  };
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setMounted(true));
+    const t = setTimeout(() => setShowContent(true), 1900);
+    return () => { cancelAnimationFrame(frame); clearTimeout(t); };
+  }, []);
 
   const setNav = (v: boolean) => {
     if (v === navScrolledRef.current) return;
@@ -199,9 +220,50 @@ export default function HeroSequence() {
         <div className="sticky top-0 h-screen overflow-hidden">
 
           <section id="hero" className="absolute inset-0" style={{ zIndex: 10 }}>
-            <Image src={imgSrc(sections[0].img.folder, sections[0].img.file)} alt="CNS Design"
-              fill priority sizes="(max-width: 767px) 1px, 100vw" className="object-cover" />
-            <SectionContent s={sections[0]} />
+            <video
+              ref={slowVideo}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+            >
+              <source src="/video/design_hero.mp4" type="video/mp4" />
+            </video>
+
+            {/* 인트로 로고 */}
+            <div
+              className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
+              style={{
+                opacity: showContent ? 0 : 1,
+                transition: showContent ? 'opacity 0.8s ease-out' : 'none',
+              }}
+            >
+              <Image
+                src={LOGO_WHITE}
+                alt="씨앤에스디자인"
+                width={300}
+                height={102}
+                className="w-auto"
+                style={{
+                  opacity: mounted ? 1 : 0,
+                  transform: mounted ? 'translateY(0)' : 'translateY(28px)',
+                  transition: 'opacity 1.1s ease-out, transform 1.1s cubic-bezier(0.22,1,0.36,1)',
+                }}
+                priority
+              />
+            </div>
+
+            <SectionContent
+              s={sections[0]}
+              textStyle={{
+                opacity: showContent ? 1 : 0,
+                transform: showContent ? 'translateY(0)' : 'translateY(20px)',
+                transition: showContent
+                  ? 'opacity 1s ease-out 0.1s, transform 1s cubic-bezier(0.22,1,0.36,1) 0.1s'
+                  : 'none',
+              }}
+            />
 
             {/* 스크롤 다운 인디케이터 */}
             <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40">
@@ -214,13 +276,13 @@ export default function HeroSequence() {
           </section>
 
           <div ref={sec2Ref} className="absolute inset-0" style={{ zIndex: 20, transform: 'translateY(100%)' }}>
-            <Image src={imgSrc(sections[1].img.folder, sections[1].img.file)} alt="Design Philosophy"
+            <Image src={sections[1].src} alt="Design Philosophy"
               fill loading="lazy" sizes="(max-width: 767px) 1px, 100vw" className="object-cover" />
             <SectionContent s={sections[1]} />
           </div>
 
           <div ref={sec3Ref} className="absolute inset-0" style={{ zIndex: 30, transform: 'translateY(100%)' }}>
-            <Image src={imgSrc(sections[2].img.folder, sections[2].img.file)} alt="Our Process"
+            <Image src={sections[2].src} alt="Our Process"
               fill loading="lazy" sizes="(max-width: 767px) 1px, 100vw" className="object-cover" />
             <SectionContent s={sections[2]} />
           </div>
@@ -231,14 +293,55 @@ export default function HeroSequence() {
       {/* ── 모바일: 3개 풀스크린 스택 ── */}
       <div className="md:hidden">
         <div id="hero" className="relative h-dvh">
-          <Image src={imgSrc(sections[0].img.folder, sections[0].img.file)} alt="CNS Design"
-            fill priority sizes="(min-width: 768px) 1px, 100vw" className="object-cover" />
-          <SectionContent s={sections[0]} mobile />
+          <video
+            ref={slowVideo}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src="/video/design_hero.mp4" type="video/mp4" />
+          </video>
+
+          {/* 인트로 로고 */}
+          <div
+            className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
+            style={{
+              opacity: showContent ? 0 : 1,
+              transition: showContent ? 'opacity 0.8s ease-out' : 'none',
+            }}
+          >
+            <Image
+              src={LOGO_WHITE}
+              alt="씨앤에스디자인"
+              width={220}
+              height={74}
+              className="w-auto"
+              style={{
+                opacity: mounted ? 1 : 0,
+                transform: mounted ? 'translateY(0)' : 'translateY(28px)',
+                transition: 'opacity 1.1s ease-out, transform 1.1s cubic-bezier(0.22,1,0.36,1)',
+              }}
+            />
+          </div>
+
+          <SectionContent
+            s={sections[0]}
+            mobile
+            textStyle={{
+              opacity: showContent ? 1 : 0,
+              transform: showContent ? 'translateY(0)' : 'translateY(20px)',
+              transition: showContent
+                ? 'opacity 1s ease-out 0.1s, transform 1s cubic-bezier(0.22,1,0.36,1) 0.1s'
+                : 'none',
+            }}
+          />
         </div>
         {sections.slice(1).map((s, i) => (
           <div key={i + 1} className="relative h-dvh">
             <Image
-              src={imgSrc(s.img.folder, s.img.file)}
+              src={s.src}
               alt={s.en}
               fill
               loading="lazy"

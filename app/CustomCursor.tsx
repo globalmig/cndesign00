@@ -111,6 +111,7 @@ export default function CustomCursor() {
     position:      'fixed',
     top:           0,
     left:          0,
+    transform:     'translate(-500px, -500px)',
     pointerEvents: 'none',
     zIndex:        99999,
     willChange:    'transform',

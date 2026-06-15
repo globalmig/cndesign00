@@ -15,7 +15,7 @@ html {
   scroll-behavior: smooth;
 }
 
-@media (pointer: fine) {
+@media (pointer: fine) and (min-width: 1200px) {
   * { cursor: none !important; }
 }
 
