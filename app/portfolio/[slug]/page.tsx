@@ -43,26 +43,26 @@ export default function PortfolioDetail() {
 
   if (!project) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-[#888]">프로젝트를 찾을 수 없습니다.</p>
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <p className="text-white/50">프로젝트를 찾을 수 없습니다.</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-[#f9f8f5] min-h-screen">
+    <div className="bg-black min-h-screen">
 
       {/* ── NAV ───────────────────────────────────────────────── */}
-      <header className="fixed top-0 inset-x-0 z-40 bg-white/95 backdrop-blur-sm border-b border-black/8">
+      <header className="fixed top-0 inset-x-0 z-40 bg-black/95 backdrop-blur-sm border-b border-white/10">
         <div className="max-w-7xl mx-auto px-8 h-16 flex items-center justify-between">
           <button
             onClick={() => router.back()}
-            className="flex items-center gap-3 text-xs tracking-[0.25em] uppercase text-[#888] hover:text-[#1c1c1c] transition-colors"
+            className="flex items-center gap-3 text-xs tracking-[0.25em] uppercase text-white/50 hover:text-white transition-colors"
           >
             <span className="text-lg leading-none">←</span>
             <span>Back</span>
           </button>
-          <Link href="/" className="text-xs tracking-[0.3em] uppercase text-[#1c1c1c]">
+          <Link href="/" className="text-xs tracking-[0.3em] uppercase text-white/80">
             CNS Design
           </Link>
         </div>
@@ -134,12 +134,12 @@ export default function PortfolioDetail() {
           <div className="border-t border-white/10 pt-8 md:pt-10 flex flex-col sm:flex-row sm:items-start gap-6 sm:gap-16">
             <div className="shrink-0">
               <p className="text-sm text-white/70">씨앤에스디자인</p>
-              <p className="text-xs text-white/35 mt-1">대표 유두석</p>
+              <p className="text-xs text-white/35 mt-1">대표 강정권</p>
             </div>
             <div className="text-xs text-white/35 leading-loose">
-              <p>Fax. 032-710-2267</p>
-              <p>cnsdesign@cnsdesign.co.kr</p>
-              <p>인천광역시 계양구 서운산어로 27, 204,205호 (서운동 엘림빌딩)</p>
+              <p>서운산업로 27</p>
+              <p>e-mail - cnsdesign@cnsdesign.co.kr</p>
+              <p>Tel - 032-710-2523</p>
             </div>
             <div className="sm:ml-auto self-center mt-2 sm:mt-0">
               <button

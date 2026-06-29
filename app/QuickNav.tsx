@@ -3,33 +3,24 @@
 import { useEffect, useState } from 'react';
 
 const ITEMS = [
-  { id: 'hero',      label: 'Home' },
+  { id: 'intro',     label: 'Home' },
   { id: 'retail',    label: 'Retail' },
   { id: 'exercise',  label: 'Exercise' },
   { id: 'residence', label: 'Residence' },
   { id: 'office',    label: 'Office & Etc' },
-  { id: 'portfolio', label: 'Portfolio' },
   { id: 'about',     label: 'About' },
   { id: 'contact',   label: 'Contact' },
 ];
 
 export default function QuickNav() {
-  const [active, setActive] = useState('hero');
-  const [dark, setDark]     = useState(true); // 현재 섹션 배경이 어두운지
-
-  const DARK_SECTIONS = new Set(['hero', 'portfolio', 'contact']);
+  const [active, setActive] = useState('intro');
 
   useEffect(() => {
     const observers = ITEMS.map(({ id }) => {
       const el = document.getElementById(id);
       if (!el) return null;
       const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setActive(id);
-            setDark(DARK_SECTIONS.has(id));
-          }
-        },
+        ([entry]) => { if (entry.isIntersecting) setActive(id); },
         { threshold: 0.4 },
       );
       obs.observe(el);
@@ -38,39 +29,29 @@ export default function QuickNav() {
     return () => observers.forEach((o) => o?.disconnect());
   }, []);
 
-  const dot  = dark ? 'bg-white/90'  : 'bg-[#1c1c1c]/80';
-  const ring = dark ? 'border-white/50' : 'border-[#1c1c1c]/40';
-  const text = dark ? 'text-white'    : 'text-[#1c1c1c]';
-
   return (
-    <div className="fixed left-5 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-start gap-5">
+    <div className="fixed left-5 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-start gap-4.5">
       {ITEMS.map(({ id, label }) => {
         const isActive = active === id;
         return (
-          <a
-            key={id}
-            href={`#${id}`}
-            className="group flex items-center gap-3"
-          >
+          <a key={id} href={`#${id}`} className="group flex items-center gap-3">
             {/* 도트 */}
             <span
-              className={`
-                block rounded-full border transition-all duration-300
-                ${isActive
-                  ? `w-2 h-2 ${dot} border-transparent`
-                  : `w-1.5 h-1.5 bg-transparent ${ring}`
-                }
-              `}
+              className="block rounded-full transition-all duration-300"
+              style={
+                isActive
+                  ? { width: '7px', height: '7px', background: '#a08060', border: 'none' }
+                  : { width: '5px', height: '5px', background: 'transparent', border: '1px solid rgba(255,255,255,0.3)' }
+              }
             />
-            {/* 레이블 — 호버 시 표시 */}
+            {/* 레이블 */}
             <span
-              className={`
-                text-[0.58rem] tracking-[0.2em] uppercase font-light
-                opacity-0 -translate-x-1
-                group-hover:opacity-100 group-hover:translate-x-0
-                transition-all duration-200
-                ${isActive ? `opacity-70 translate-x-0 ${text}` : text}
-              `}
+              className="text-[0.58rem] tracking-[0.22em] uppercase font-light transition-all duration-200 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0"
+              style={
+                isActive
+                  ? { opacity: 1, transform: 'translateX(0)', color: '#a08060' }
+                  : { color: 'rgba(255,255,255,0.5)' }
+              }
             >
               {label}
             </span>

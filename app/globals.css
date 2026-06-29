@@ -28,6 +28,17 @@ body {
   overflow-wrap: break-word;
 }
 
+/* 로고 3단계 위→아래 등장 */
+@keyframes logoRevealDown {
+  0%   { clip-path: inset(0 0 100% 0); transform: translateY(-22px); opacity: 0; }
+  5%   { opacity: 1; }
+  30%  { clip-path: inset(0 0 62% 0);  transform: translateY(-11px); }
+  43%  { clip-path: inset(0 0 62% 0);  transform: translateY(-11px); }
+  67%  { clip-path: inset(0 0 24% 0);  transform: translateY(-4px); }
+  78%  { clip-path: inset(0 0 24% 0);  transform: translateY(-4px); }
+  100% { clip-path: inset(0 0 0% 0);   transform: translateY(0);    opacity: 1; }
+}
+
 @keyframes scrollLine {
   0%   { opacity: 0; transform: scaleY(0); transform-origin: top; }
   40%  { opacity: 1; transform: scaleY(1); transform-origin: top; }

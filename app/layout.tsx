@@ -69,6 +69,8 @@ export default function RootLayout({
       className={`${geistSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        {/* 새로고침 시 브라우저의 스크롤 자동복원 비활성화 — 인트로 애니메이션이 항상 보이도록 */}
+        <script dangerouslySetInnerHTML={{ __html: `history.scrollRestoration = 'manual';` }} />
         <CustomCursor />
         {children}
       </body>

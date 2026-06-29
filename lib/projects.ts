@@ -71,29 +71,6 @@ export const projects: Project[] = [
     colSpan: 1, rowSpan: 1, category: 'retail',
   },
   {
-    name: '대방동 카페 프로스퍼',
-    folder: '대방동 카페 프로스퍼',
-    cover: 'KakaoTalk_20260525_133416258.jpg',
-    images: [
-      'KakaoTalk_20260525_133416258.jpg',
-      'KakaoTalk_20260525_133416258_01.jpg',
-      'KakaoTalk_20260525_133416258_02.jpg',
-      'KakaoTalk_20260525_133416258_03.jpg',
-    ],
-    colSpan: 2, rowSpan: 1, category: 'retail',
-  },
-  {
-    name: '대방동 피자·파스타',
-    folder: '대방동 피자,파스타',
-    cover: 'KakaoTalk_20260525_132917437.jpg',
-    images: [
-      'KakaoTalk_20260525_132917437.jpg',
-      'KakaoTalk_20260525_132917437_01.jpg',
-      'KakaoTalk_20260525_132917437_02.jpg',
-    ],
-    colSpan: 1, rowSpan: 1, category: 'retail',
-  },
-  {
     name: '리핏피트니스',
     folder: '리핏피트니스',
     cover: 'L7R07328.JPG',
@@ -177,7 +154,7 @@ export const projects: Project[] = [
   {
     name: '프라이빗룸',
     folder: '프라이빗룸',
-    cover: 'KakaoTalk_20240709_122023485.jpg',
+    cover: 'fix.png',
     images: [
       'KakaoTalk_20240709_122023485.jpg',
       'KakaoTalk_20240709_122023485_03.jpg',
