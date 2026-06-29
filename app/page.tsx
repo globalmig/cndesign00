@@ -203,9 +203,10 @@ export default function Home() {
               <p className="text-xs text-white/65 mt-1">대표 강정권</p>
             </div>
             <div className="text-xs text-white/65 leading-loose">
-              <p>서운산업로 27</p>
-              <p>e-mail - cnsdesign@cnsdesign.co.kr</p>
               <p>Tel - 032-710-2523</p>
+              <p>Fax - 032-710-2267</p>
+              <p>E-mail - cnsdesign@cnsdesign.co.kr</p>
+              <p>인천광역시 계양구 서운산업로 27, 204, 205호 (서운동 엘림빌딩)</p>
             </div>
           </div>
           <div className="mt-12 md:mt-20 pt-8 border-t border-white/10 flex items-center justify-between">
