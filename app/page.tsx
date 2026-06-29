@@ -95,9 +95,11 @@ export default function Home() {
                     <FlipCard
                       key={p.folder}
                       p={p}
-                      colSpanClass={isLast ? "col-span-full" : list.length > 2 && p.colSpan === 2 ? "col-span-2" : ""}
+                      colSpanClass={isLast && list.length > 2 ? "col-span-full" : list.length > 2 && p.colSpan === 2 ? "col-span-2" : ""}
                       rowSpanClass={!isLast && list.length > 2 && p.rowSpan === 2 ? "md:row-span-2" : ""}
-                      sizes={isLast ? "100vw" : list.length <= 2 ? "(max-width: 768px) 100vw, 50vw" : p.colSpan === 2 ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 50vw, 33vw"}
+                      sizes={
+                        isLast && list.length > 2 ? "100vw" : list.length <= 2 ? "(max-width: 768px) 100vw, 50vw" : p.colSpan === 2 ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 50vw, 33vw"
+                      }
                     />
                   );
                 })}
@@ -196,7 +198,7 @@ export default function Home() {
               <div className="text-white/20 text-xs tracking-wider">
                 Created by{" "}
                 <a href="https://www.weasley-market.com/homepage-development" target="_blank" rel="noopener noreferrer" className="hover:text-white/40 transition-colors">
-                  Weasley Market
+                  GlobalMIG
                 </a>
               </div>
             </div>
