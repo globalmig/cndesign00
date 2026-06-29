@@ -127,11 +127,11 @@ export default function PortfolioDetail() {
       </div>
 
       {/* ── INQUIRY ───────────────────────────────────────────── */}
-      <section className="bg-[#1a1a1a] text-white py-24 px-8">
+      <section className="bg-[#1a1a1a] text-white py-16 md:py-24 px-4 md:px-8">
         <div className="max-w-7xl mx-auto">
           <p className="text-[0.65rem] tracking-[0.5em] uppercase text-[#a08060] mb-4">Inquiry</p>
-          <h2 className="text-4xl font-extralight mb-12">비슷한 공간을 원하신다면</h2>
-          <div className="border-t border-white/10 pt-10 flex flex-col sm:flex-row sm:items-start gap-6 sm:gap-20">
+          <h2 className="text-2xl md:text-4xl font-extralight mb-8 md:mb-12">비슷한 공간을 원하신다면</h2>
+          <div className="border-t border-white/10 pt-8 md:pt-10 flex flex-col sm:flex-row sm:items-start gap-6 sm:gap-16">
             <div className="shrink-0">
               <p className="text-sm text-white/70">씨앤에스디자인</p>
               <p className="text-xs text-white/35 mt-1">대표 유두석</p>

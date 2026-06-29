@@ -24,7 +24,7 @@ export const projects: Project[] = [
       'L7R00040.jpg','L7R00043.jpg','L7R00046.jpg','L7R00051.jpg',
       'L7R00053.jpg','L7R00057.jpg','L7R00060.jpg','L7R00070.jpg','L7R00077.jpg',
     ],
-    colSpan: 2, rowSpan: 1, category: 'retail',
+    colSpan: 2, rowSpan: 1, category: 'exercise',
   },
   {
     name: 'CMB 방송국',
@@ -162,7 +162,7 @@ export const projects: Project[] = [
       'L7R06101.JPG','L7R06108.JPG','L7R06111.JPG','L7R06115.JPG',
       'L7R06117.JPG','L7R06121.JPG',
     ],
-    colSpan: 2, rowSpan: 1, category: 'retail',
+    colSpan: 2, rowSpan: 1, category: 'residence',
   },
   {
     name: '콜렉션비',
@@ -192,7 +192,7 @@ export const projects: Project[] = [
       'KakaoTalk_20240709_122023485_22.jpg',
       'KakaoTalk_20240709_122023485_26.jpg',
     ],
-    colSpan: 1, rowSpan: 2, category: 'residence',
+    colSpan: 1, rowSpan: 2, category: 'office',
   },
   {
     name: '홀리랜드호텔',

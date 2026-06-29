@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const RING = 64;
 const DOT  = 4;
@@ -18,13 +18,25 @@ function isClickable(el: Element | null): boolean {
 }
 
 export default function CustomCursor() {
-  const dotRef   = useRef<HTMLDivElement>(null);
-  const ringRef  = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
+  const dotRef    = useRef<HTMLDivElement>(null);
+  const ringRef   = useRef<HTMLDivElement>(null);
+  const labelRef  = useRef<HTMLSpanElement>(null);
+  const [active, setActive] = useState(false);
 
+  // 1단계: 디바이스 감지 + 뷰포트 폭 감지 (마운트 직후)
   useEffect(() => {
-    // 터치 기기는 커서 불필요
-    if (window.matchMedia('(pointer: coarse)').matches) return;
+    const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+    const check = () => {
+      setActive(!isCoarse && window.innerWidth >= 1200);
+    };
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  // 2단계: active 상태(DOM 요소 존재) 이후 애니메이션 셋업
+  useEffect(() => {
+    if (!active) return;
 
     const mouse = { x: -500, y: -500 };
     const dot   = { x: -500, y: -500 };
@@ -32,19 +44,17 @@ export default function CustomCursor() {
     let hovering = false;
     let clicking = false;
     let raf = 0;
-    let dirty = true; // 움직임 있을 때만 RAF 지속
 
     const onMove = (e: MouseEvent) => {
       mouse.x  = e.clientX;
       mouse.y  = e.clientY;
       hovering = isClickable(e.target as Element);
-      dirty = true;
       if (!raf) raf = requestAnimationFrame(tick);
     };
 
-    const onDown  = () => { clicking = true;  dirty = true; };
-    const onUp    = () => { clicking = false; dirty = true; };
-    const onLeave = () => { mouse.x = -500; mouse.y = -500; dirty = true; };
+    const onDown  = () => { clicking = true; };
+    const onUp    = () => { clicking = false; };
+    const onLeave = () => { mouse.x = -500; mouse.y = -500; };
 
     const tick = () => {
       dot.x  = lerp(dot.x,  mouse.x, 0.9);
@@ -75,7 +85,6 @@ export default function CustomCursor() {
         Math.abs(ring.scale - (clicking ? 0.72 : 1)) < 0.01;
 
       if (settled) {
-        dirty = false;
         raf = 0;
       } else {
         raf = requestAnimationFrame(tick);
@@ -94,12 +103,15 @@ export default function CustomCursor() {
       document.removeEventListener('mouseleave', onLeave);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [active]);
+
+  if (!active) return null;
 
   const base: React.CSSProperties = {
     position:      'fixed',
     top:           0,
     left:          0,
+    transform:     'translate(-500px, -500px)',
     pointerEvents: 'none',
     zIndex:        99999,
     willChange:    'transform',
