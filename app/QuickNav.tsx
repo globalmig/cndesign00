@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react';
 const ITEMS = [
   { id: 'hero',      label: 'Home' },
   { id: 'retail',    label: 'Retail' },
-  { id: 'office',    label: 'Office' },
-  { id: 'residence', label: 'Residence' },
   { id: 'exercise',  label: 'Exercise' },
+  { id: 'residence', label: 'Residence' },
+  { id: 'office',    label: 'Office & Etc' },
   { id: 'portfolio', label: 'Portfolio' },
   { id: 'about',     label: 'About' },
   { id: 'contact',   label: 'Contact' },
@@ -43,7 +43,7 @@ export default function QuickNav() {
   const text = dark ? 'text-white'    : 'text-[#1c1c1c]';
 
   return (
-    <div className="fixed left-5 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-start gap-5">
+    <div className="fixed left-5 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-start gap-5">
       {ITEMS.map(({ id, label }) => {
         const isActive = active === id;
         return (
