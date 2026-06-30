@@ -357,12 +357,20 @@ export default function HeroSequence() {
           <div ref={sec2Ref} className="absolute inset-0" style={{ zIndex: 30, transform: "translateY(100%)", transition: "transform 0.7s cubic-bezier(0.25,1,0.5,1)" }}>
             <Image src={sections[1].src} alt="Design Philosophy" fill loading="lazy" sizes="(max-width: 767px) 1px, 100vw" className="object-cover" />
             <SectionContent s={sections[1]} />
+            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 text-white/40">
+              <span className="text-[0.5rem] tracking-[0.55em] uppercase">Scroll Down</span>
+              <span className="block w-px h-14 bg-white/40" style={{ animation: "scrollLine 1.8s ease-in-out infinite" }} />
+            </div>
           </div>
 
           {/* 히어로 섹션 3 */}
           <div ref={sec3Ref} className="absolute inset-0" style={{ zIndex: 40, transform: "translateY(100%)", transition: "transform 0.7s cubic-bezier(0.25,1,0.5,1)" }}>
             <Image src={sections[2].src} alt="Our Process" fill loading="lazy" sizes="(max-width: 767px) 1px, 100vw" className="object-cover" />
             <SectionContent s={sections[2]} />
+            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 text-white/40">
+              <span className="text-[0.5rem] tracking-[0.55em] uppercase">Scroll Down</span>
+              <span className="block w-px h-14 bg-white/40" style={{ animation: "scrollLine 1.8s ease-in-out infinite" }} />
+            </div>
           </div>
         </div>
       </div>
@@ -476,6 +484,18 @@ export default function HeroSequence() {
               Interior Design Studio
             </p>
           </div>
+
+          {/* 스크롤 다운 인디케이터 — 애니메이션 완료 후 등장 */}
+          <div
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 text-white/45 pointer-events-none"
+            style={{
+              opacity: mounted ? 1 : 0,
+              transition: "opacity 0.8s ease-out 5.3s",
+            }}
+          >
+            <span className="text-[0.48rem] tracking-[0.55em] uppercase">Scroll</span>
+            <span className="block w-px h-10 bg-white/40" style={{ animation: "scrollLine 1.8s ease-in-out infinite" }} />
+          </div>
         </div>
 
         {/* 히어로 섹션 1 */}
@@ -484,6 +504,10 @@ export default function HeroSequence() {
             <source src="/video/design_hero.mp4" type="video/mp4" />
           </video>
           <SectionContent s={sections[0]} mobile />
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 text-white/40 pointer-events-none">
+            <span className="text-[0.48rem] tracking-[0.55em] uppercase">Scroll</span>
+            <span className="block w-px h-10 bg-white/40" style={{ animation: "scrollLine 1.8s ease-in-out infinite" }} />
+          </div>
         </div>
 
         {/* 히어로 섹션 2, 3 */}
@@ -491,6 +515,10 @@ export default function HeroSequence() {
           <div key={i + 1} className="relative h-dvh">
             <Image src={s.src} alt={s.en} fill loading="lazy" sizes="(min-width: 768px) 1px, 100vw" className="object-cover" />
             <SectionContent s={s} mobile />
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 text-white/40 pointer-events-none">
+              <span className="text-[0.48rem] tracking-[0.55em] uppercase">Scroll</span>
+              <span className="block w-px h-10 bg-white/40" style={{ animation: "scrollLine 1.8s ease-in-out infinite" }} />
+            </div>
           </div>
         ))}
       </div>
