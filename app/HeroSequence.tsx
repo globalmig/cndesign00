@@ -91,7 +91,8 @@ export default function HeroSequence() {
       if (window.scrollY > 50) return; // 이미 스크롤한 경우 건너뜀
       const isMobile = window.innerWidth < 768;
       if (isMobile) {
-        document.getElementById("hero")?.scrollIntoView({ behavior: "smooth" });
+        const heroEl = document.getElementById("hero");
+        if (heroEl) window.scrollTo({ top: heroEl.offsetTop, behavior: "smooth" });
       } else if (seqRef.current) {
         window.scrollTo({ top: seqRef.current.offsetTop + window.innerHeight, behavior: "smooth" });
       }

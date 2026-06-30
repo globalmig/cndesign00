@@ -102,9 +102,22 @@ export default function Home() {
                       }
                     />
                   );
+                  const logoMobile = (key: string) => (
+                    <div key={key} className="flex md:hidden flex-col items-center justify-center bg-[#111] gap-3">
+                      <Image
+                        src="/logo/%EC%94%A8%EC%95%A4%EC%97%90%EC%8A%A4%20%EB%A1%9C%EA%B3%A0-%ED%99%94%EC%9D%B4%ED%8A%B8.png"
+                        alt="씨앤에스디자인"
+                        width={200}
+                        height={60}
+                        className="w-36 h-auto object-contain opacity-85"
+                      />
+                      <p className="text-[0.58rem] tracking-[0.4em] uppercase text-white/60">Design Studio</p>
+                    </div>
+                  );
+                  // exercise: desktop gap at row 3 col 3 (before last full-width card)
                   if (cat.id === "exercise" && isLast) {
                     return [
-                      <div key="cns-logo" className="hidden md:flex flex-col items-center justify-center bg-[#111] gap-4">
+                      <div key="exercise-logo" className="hidden md:flex flex-col items-center justify-center bg-[#111] gap-4">
                         <Image
                           src="/logo/%EC%94%A8%EC%95%A4%EC%97%90%EC%8A%A4%20%EB%A1%9C%EA%B3%A0-%ED%99%94%EC%9D%B4%ED%8A%B8.png"
                           alt="씨앤에스디자인"
@@ -116,6 +129,14 @@ export default function Home() {
                       </div>,
                       card,
                     ];
+                  }
+                  // retail: mobile gap at row 2 col 2 (before last full-width card)
+                  if (cat.id === "retail" && isLast) {
+                    return [logoMobile("retail-logo"), card];
+                  }
+                  // office: mobile gap at row 1 col 2 (after first card, before col-span-2 card)
+                  if (cat.id === "office" && idx === 0) {
+                    return [card, logoMobile("office-logo")];
                   }
                   return card;
                 })}
